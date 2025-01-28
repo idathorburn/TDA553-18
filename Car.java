@@ -32,6 +32,10 @@ public abstract class Car implements Movable {
         return currentSpeed;
     }
 
+    protected void setCurrentSpeed(double speed) { 
+        currentSpeed = Math.max(0, Math.min(speed, enginePower));
+    }
+
     public Color getColor(){
         return color;
     }
@@ -51,18 +55,24 @@ public abstract class Car implements Movable {
     public abstract double speedFactor();
 
     public void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);}
+        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+    }
 
     public void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount,0);}
+        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
+    }
 
-    // TODO fix this method according to lab pm
     public void gas(double amount){
+        if (amount < 0 || amount > 1) {
+            throw new IllegalArgumentException("Amount must be between 0 and 1");
+        }
         incrementSpeed(amount);
     }
 
-    // TODO fix this method according to lab pm
     public void brake(double amount){
+        if (amount < 0 || amount > 1) {
+            throw new IllegalArgumentException("Amount must be between 0 and 1");
+        }
         decrementSpeed(amount);
     }
 

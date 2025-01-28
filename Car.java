@@ -1,11 +1,14 @@
 import java.awt.*;
 
-public abstract class Car {
+public abstract class Car implements Movable {
     private int nrDoors; // Number of doors on the car
     private double enginePower; // Engine power of the car
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
     private String modelName; // The car model name
+    private double x; // X position
+    private double y; // Y position
+    private double direction; // Direction in degrees (0 is to the right, 90 is up, 180 is left, 270 is down)
 
     public Car(int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
@@ -13,6 +16,9 @@ public abstract class Car {
         this.currentSpeed = 0; // Cars are stationary when created
         this.color = color;
         this.modelName = modelName;
+        this.x = 0;
+        this.y = 0;
+        this.direction = 0; // Initial direction is to the right
     }
 
     public int getNrDoors(){
@@ -24,6 +30,10 @@ public abstract class Car {
 
     public double getCurrentSpeed(){
         return currentSpeed;
+    }
+
+    protected void setCurrentSpeed(double speed) { 
+        currentSpeed = Math.max(0, Math.min(speed, enginePower));
     }
 
     public Color getColor(){
@@ -45,18 +55,54 @@ public abstract class Car {
     public abstract double speedFactor();
 
     public void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);}
+        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+    }
 
     public void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount,0);}
+        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
+    }
 
-    // TODO fix this method according to lab pm
     public void gas(double amount){
+        if (amount < 0 || amount > 1) {
+            throw new IllegalArgumentException("Amount must be between 0 and 1");
+        }
         incrementSpeed(amount);
     }
 
-    // TODO fix this method according to lab pm
     public void brake(double amount){
+        if (amount < 0 || amount > 1) {
+            throw new IllegalArgumentException("Amount must be between 0 and 1");
+        }
         decrementSpeed(amount);
+    }
+
+    @Override
+    public void move() {
+        // Convert direction to radians because Math.cos and Math.sin take radians
+        double radians = Math.toRadians(direction);
+        x += Math.cos(radians) * currentSpeed;
+        y += Math.sin(radians) * currentSpeed;
+    }
+
+    @Override
+    public void turnLeft() {
+        direction = (direction + 90) % 360;
+    }
+
+    @Override
+    public void turnRight() {
+        direction = (direction - 90 + 360) % 360;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getDirection() {
+        return direction;
     }
 }

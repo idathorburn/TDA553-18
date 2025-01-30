@@ -27,7 +27,7 @@ public abstract class Car implements Moveable{
         return enginePower;
     }
 
-    public void setCurrentSpeed(double speed) {
+    private void setCurrentSpeed(double speed) {
         this.currentSpeed = Math.max(0, Math.min(speed, enginePower));
     }
 
@@ -53,21 +53,21 @@ public abstract class Car implements Moveable{
 
     public abstract double speedFactor();
 
-    public void incrementSpeed(double amount) {
+    private void incrementSpeed(double amount) {
         setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
     }
 
-    public void decrementSpeed(double amount) {
+    private void decrementSpeed(double amount) {
         setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
     }
 
-    public void setPosition(Point position) {
+    private void setPosition(Point position) {
         this.position = position;}
 
     public Point getPosition() {
         return position;}
 
-    public void setDirection(double degrees) {
+    private void setDirection(double degrees) {
         this.direction = (degrees % 360 + 360) % 360;}
 
     public double getDirection() {

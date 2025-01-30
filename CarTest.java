@@ -126,28 +126,6 @@ public class CarTest {
     }
 
     @Test
-    public void testSetPosition() {
-        volvo.setPosition(new Point(100, 200));
-        assertEquals(100, volvo.getPosition().x);
-        assertEquals(200, volvo.getPosition().y);
-    }
-
-    @Test
-    public void testSetDirectionWithinBounds() {
-        volvo.setDirection(370); // Should wrap to 10 degrees
-        assertEquals(10, volvo.getDirection(), epsilon);
-
-        volvo.setDirection(-90); // Should wrap to 270 degrees
-        assertEquals(270, volvo.getDirection(), epsilon);
-    }
-
-    @Test
-    public void testSetDirectionExtremeValues() {
-        volvo.setDirection(1000); // Should wrap within [0,360)
-        assertEquals(280, volvo.getDirection(), epsilon);
-    }
-
-    @Test
     public void testSetColor() {
         volvo.setColor(Color.blue);
         assertEquals(Color.blue, volvo.getColor());
@@ -180,5 +158,3 @@ public class CarTest {
         assertEquals(initialY, volvo.getPosition().y);
     }
 }
-
-

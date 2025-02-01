@@ -61,7 +61,7 @@ public abstract class Car implements Moveable{
         setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
     }
 
-    private void setPosition(Point position) {
+    public void setPosition(Point position) {
         this.position = position;}
 
     public Point getPosition() {

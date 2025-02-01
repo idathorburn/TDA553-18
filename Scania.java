@@ -1,0 +1,53 @@
+import java.awt.*;
+
+public class Scania extends Truck {
+
+    private double bedAngle;
+
+    public Scania() {
+        super(2, 200, Color.BLUE, "Scania");
+        this.bedAngle = 0.0;
+    }
+
+    public double getBedAngle() {
+        return bedAngle;
+    }
+
+    private double getMaxBedAngle() {
+        return 70.0;
+    }
+
+    // If we want to specifically set the bed angle
+    public void setBedAngle(double bedAngle) {
+        if (bedAngle > this.getMaxBedAngle() || bedAngle < 0) {
+            throw new IllegalArgumentException("Angle must be between 0 and 70");
+        }
+        this.bedAngle = bedAngle;
+    }
+
+    @Override
+    protected boolean canDrive() {
+        return bedAngle == 0.0;
+    }
+
+    @Override
+    protected void raiseBed() {
+        if (getCurrentSpeed() != 0) {
+            throw new IllegalStateException("Cannot raise bed while the truck is moving.");
+        }
+        bedAngle = getMaxBedAngle();
+    }
+
+    @Override
+    protected void lowerBed() {
+        if (getCurrentSpeed() != 0) {
+            throw new IllegalStateException("Cannot lower bed while the truck is moving.");
+        }
+        bedAngle = 0.0;
+    }
+
+    @Override
+    public double speedFactor() {
+        return getEnginePower() * 0.01;
+    }
+}

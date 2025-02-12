@@ -19,6 +19,7 @@ public class CarTest {
     @Test
     public void testVolvo240Constructor() {
         assertEquals(4, volvo.getNrDoors());
+        assertEquals(4.8, volvo.getLength());
         assertEquals(100, volvo.getEnginePower());
         assertEquals(Color.black, volvo.getColor());
         assertEquals(0, volvo.getCurrentSpeed());
@@ -27,6 +28,7 @@ public class CarTest {
     @Test
     public void testSaab95Constructor() {
         assertEquals(2, saab.getNrDoors());
+        assertEquals(5, saab.getLength());
         assertEquals(125, saab.getEnginePower());
         assertEquals(Color.red, saab.getColor());
         assertEquals(0, saab.getCurrentSpeed());

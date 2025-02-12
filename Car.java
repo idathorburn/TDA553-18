@@ -2,6 +2,7 @@ import java.awt.*;
 
 public abstract class Car implements Moveable{
     private int nrDoors; // Number of doors on the car
+    private double length; // Length of car
     private double enginePower; // Engine power of the car
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
@@ -9,8 +10,9 @@ public abstract class Car implements Moveable{
     private Point position;
     private double direction; // direction in degrees
 
-    public Car(int nrDoors, double enginePower, Color color, String modelName) {
+    public Car(int nrDoors, double length,double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
+        this.length = length;
         this.enginePower = enginePower;
         this.currentSpeed = 0; // Cars are stationary when created
         this.color = color;
@@ -21,6 +23,10 @@ public abstract class Car implements Moveable{
 
     public int getNrDoors(){
         return nrDoors;
+    }
+
+    public double getLength() {
+        return length;
     }
 
     public double getEnginePower(){
@@ -61,7 +67,7 @@ public abstract class Car implements Moveable{
         setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
     }
 
-    private void setPosition(Point position) {
+    public void setPosition(Point position) {
         this.position = position;}
 
     public Point getPosition() {

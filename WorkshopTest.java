@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WorkshopTest {
 
-    private Workshop<Car> workshop;
-    private Car volvo;
+    private Workshop<Volvo240> workshop;
+    private Volvo240 volvo;
+    private Saab95 saab;
 
     @BeforeEach
     void setUp() {
@@ -25,6 +26,14 @@ public class WorkshopTest {
         workshop.addCar(new Volvo240());
         assertThrows(IllegalStateException.class, () -> workshop.addCar(new Volvo240()));
     }
+
+//    Testing workshop does not work with wrong car type
+
+//    @Test
+//    void testWrongCarType() {
+//        saab = new Saab95();
+//        workshop.addCar(saab);
+//    }
 
     @Test
     void testRemoveCar() {

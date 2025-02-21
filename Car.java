@@ -33,7 +33,7 @@ public abstract class Car implements Moveable{
         return enginePower;
     }
 
-    private void setCurrentSpeed(double speed) {
+    public void setCurrentSpeed(double speed) {
         this.currentSpeed = Math.max(0, Math.min(speed, enginePower));
     }
 
@@ -73,7 +73,7 @@ public abstract class Car implements Moveable{
     public Point getPosition() {
         return position;}
 
-    private void setDirection(double degrees) {
+    public void setDirection(double degrees) {
         this.direction = (degrees % 360 + 360) % 360;}
 
     public double getDirection() {
@@ -97,6 +97,7 @@ public abstract class Car implements Moveable{
 
     @Override
     public void move() {
+
         double radians = Math.toRadians(getDirection());
         int newX = (int) (getPosition().x + Math.cos(radians) * getCurrentSpeed());
         int newY = (int) (getPosition().y + Math.sin(radians) * getCurrentSpeed());

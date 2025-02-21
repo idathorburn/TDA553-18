@@ -30,17 +30,17 @@ public class Scania extends Truck {
     }
 
 
-    protected void raiseBed(double bedAngle) {
+    protected void raiseBed(double amount) {
         if (getCurrentSpeed() != 0) {
             throw new IllegalStateException("Cannot raise bed while the truck is moving.");
         }
-        setBedAngle(bedAngle);
+        setBedAngle(Math.min(bedAngle + amount, getMaxBedAngle())); // Increment up to max
     }
 
-    protected void lowerBed(double bedAngle) {
+    protected void lowerBed(double amount) {
         if (getCurrentSpeed() != 0) {
             throw new IllegalStateException("Cannot lower bed while the truck is moving.");
         }
-        setBedAngle(bedAngle);
+        setBedAngle(Math.max(bedAngle - amount, 0)); // Decrement down to 0
     }
 }

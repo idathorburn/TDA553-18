@@ -63,4 +63,13 @@ public class CarTransportTest {
         transport.lowerBed();
         assertThrows(IllegalStateException.class, () -> transport.loadCar(scaniaTruck));
     }
+
+    @Test
+    void testCarMovesWithTransport() {
+        transport.lowerBed();
+        transport.loadCar(volvo);
+        transport.raiseBed();
+        transport.move();
+        assertEquals(transport.getPosition(),volvo.getPosition());
+    }
 }

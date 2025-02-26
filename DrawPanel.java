@@ -16,6 +16,7 @@ public class DrawPanel extends JPanel{
 
     BufferedImage volvoWorkshopImage;
     Point volvoWorkshopPoint = new Point(300,300);
+    private Workshop<Volvo240> volvoWorkshop = new Workshop<>(3);
 
     // TODO: Make this general for all cars
     void moveit(Car car, int x, int y){
@@ -45,14 +46,30 @@ public class DrawPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
+
         for (Car car : carPositions.keySet()) {
+            if (car instanceof Volvo240 && volvoWorkshop.getSize() > 0) {
+                continue;  // Rita inte Volvo-bilar som är inuti verkstaden
+            }
+
             BufferedImage img = carImages.get(car.getClass().getSimpleName());
             if (img != null) {
                 Point pos = carPositions.get(car);
                 g.drawImage(img, pos.x, pos.y, null);
             }
         }
-        g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
     }
+
+    public Workshop<Volvo240> getVolvoWorkshop() {
+        return volvoWorkshop;
+    }
+
+    public Point getVolvoWorkshopPoint() {
+        return volvoWorkshopPoint;
+    }
+
+
 
 }

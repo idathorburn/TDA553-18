@@ -45,7 +45,7 @@ public class CarController {
         volvo.setPosition(new Point(0, 0));
         saab.setPosition(new Point(0, 100));
         scania.setPosition(new Point(0, 200));
-        brokenVolvo.setPosition(new Point(0, 0));
+        brokenVolvo.setPosition(new Point(0, 300));
 
         // Add the cars to the list
         cc.cars.add(volvo);
@@ -122,19 +122,45 @@ public class CarController {
         double direction = car.getDirection();
         double speed = car.getCurrentSpeed();
 
-        // Check the new potential position after movement
         double radians = Math.toRadians(direction);
         int newX = (int) (position.x + Math.cos(radians) * speed);
         int newY = (int) (position.y + Math.sin(radians) * speed);
 
-        // Check if the new position would go outside the frame boundaries
-        // 100x60 is the size of the "car"
+        // Check if the car is going outside the boundaries
         if (newX < 0 || newX + 100 > windowWidth || newY < 0 || newY + 60 > windowHeight) {
-            car.stopEngine();  // Stop the car
-            car.setDirection(car.getDirection() + 180);  // Reverse direction
-            car.startEngine();  // Start the car
+            car.stopEngine();
+            car.setDirection(car.getDirection() + 180);
+            car.startEngine();
+        }
+
+        // Check if the car is a Volvo and near the workshop
+        if (car instanceof Volvo240) {
+            Point volvoWorkshopPoint = frame.drawPanel.getVolvoWorkshopPoint();
+            Workshop<Volvo240> volvoWorkshop = frame.drawPanel.getVolvoWorkshop();
+
+            // Ensure only this car's position is checked
+            if (Math.abs(newX - volvoWorkshopPoint.x) < 50 && Math.abs(newY - volvoWorkshopPoint.y) < 50) {
+                // Check if this car is already in the workshop
+                boolean isAlreadyStored = false;
+                for (int i = 0; i < volvoWorkshop.getSize(); i++) {
+                    if (volvoWorkshop.getCar(i) == car) {  // Compare object references
+                        isAlreadyStored = true;
+                        break;
+                    }
+                }
+
+                if (!isAlreadyStored) {
+                    try {
+                        volvoWorkshop.addCar((Volvo240) car);
+                        System.out.println("Volvo added to workshop: " + car);
+                    } catch (IllegalStateException e) {
+                        System.out.println("Workshop is full!");
+                    }
+                }
+            }
         }
     }
+
     void setTurboOn() {
         for (Car car : cars) {
             if (car instanceof Saab95) {

@@ -13,7 +13,7 @@ public class Scania extends Truck {
         return bedAngle;
     }
 
-    private double getMaxBedAngle() {
+    public double getMaxBedAngle() {
         return 70.0;
     }
 

@@ -32,7 +32,8 @@ public class ScaniaTest {
     }
 
     @Test
-    public void testBedAngleNeverExceeds70() {
-        assertThrows(IllegalArgumentException.class, () -> scania.raiseBed(75.0));
+    public void testBedAngleNeverExceedsMax() {
+        scania.raiseBed(scania.getMaxBedAngle() + 10);
+        assertEquals(scania.getMaxBedAngle(), scania.getBedAngle());
     }
 }

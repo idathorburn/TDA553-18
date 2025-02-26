@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,13 +16,23 @@ public class DrawPanel extends JPanel{
     private HashMap<String, BufferedImage> carImages = new HashMap<>();
     private HashMap<Car, Point> carPositions = new HashMap<>();
 
-    BufferedImage volvoWorkshopImage;
-    Point volvoWorkshopPoint = new Point(300,300);
-    private Workshop<Volvo240> volvoWorkshop = new Workshop<>(3);
+    private HashMap<String, BufferedImage> workshopImages = new HashMap<>();
+    private HashMap<Workshop<? extends Car>, Point> workshopPositions = new HashMap<>();
+    //BufferedImage volvoWorkshopImage;
+    //Point volvoWorkshopPoint = new Point(300,300);
 
     // TODO: Make this general for all cars
     void moveit(Car car, int x, int y){
         carPositions.put(car, new Point(x, y));
+    }
+
+    void hideit(Car car) {
+        car.stopEngine();
+        car.setPosition(new Point(200, 1000));
+    }
+
+    <T extends Car> void addWorkshop (Workshop<T> ws, Point p) {
+        workshopPositions.put(ws, p);
     }
 
     // Initializes the panel and reads the images
@@ -34,7 +46,8 @@ public class DrawPanel extends JPanel{
             carImages.put("Saab95", ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg")));
             carImages.put("Scania", ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg")));
 
-            volvoWorkshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
+            workshopImages.put("Workshop<Volvo240>" ,ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg")));
+            workshopImages.put("Workshop" ,ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg")));
         } catch (IOException ex)
         {
             ex.printStackTrace();
@@ -46,30 +59,20 @@ public class DrawPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
-
         for (Car car : carPositions.keySet()) {
-            if (car instanceof Volvo240 && volvoWorkshop.getSize() > 0) {
-                continue;  // Rita inte Volvo-bilar som är inuti verkstaden
-            }
-
             BufferedImage img = carImages.get(car.getClass().getSimpleName());
             if (img != null) {
                 Point pos = carPositions.get(car);
                 g.drawImage(img, pos.x, pos.y, null);
             }
         }
+        for (var ws : workshopPositions.keySet()) {
+            BufferedImage img = workshopImages.get(ws.getClass().getSimpleName());
+            if (img != null) {
+                Point pos = workshopPositions.get(ws);
+                g.drawImage(img, pos.x, pos.y, null);
+            }
+        }
     }
-
-    public Workshop<Volvo240> getVolvoWorkshop() {
-        return volvoWorkshop;
-    }
-
-    public Point getVolvoWorkshopPoint() {
-        return volvoWorkshopPoint;
-    }
-
-
 
 }

@@ -1,8 +1,12 @@
+import org.w3c.dom.ranges.Range;
+
 import javax.swing.*;
+import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
 * This class represents the Controller part in the MVC pattern.
@@ -23,6 +27,9 @@ public class CarController {
     CarView frame;
     // A list of cars, modify if needed
     ArrayList<Car> cars = new ArrayList<>();
+
+    HashMap<Workshop<? extends Car>, Point> workshops = new HashMap<>();
+
     // Window dimensions (from CarView)
     private int windowWidth;
     private int windowHeight;
@@ -40,11 +47,10 @@ public class CarController {
         Scania scania = new Scania();
         Volvo240 brokenVolvo = new Volvo240();
 
-
         // Set the start positions
         volvo.setPosition(new Point(0, 0));
         saab.setPosition(new Point(0, 100));
-        scania.setPosition(new Point(0, 200));
+        scania.setPosition(new Point(0, 290));
         brokenVolvo.setPosition(new Point(0, 300));
 
         // Add the cars to the list
@@ -53,8 +59,14 @@ public class CarController {
         cc.cars.add(scania);
         cc.cars.add(brokenVolvo);
 
+
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
+
+        cc.workshops.put(new Workshop<Volvo240>(5), new Point(275, 275));
+        for (var ws : cc.workshops.keySet()) {
+            cc.frame.drawPanel.addWorkshop(ws, cc.workshops.get(ws));
+        }
 
         // Get window dimensions from CarView
         cc.windowWidth = cc.frame.getWindowWidth();
@@ -74,7 +86,8 @@ public class CarController {
                     continue; // Skip moving this car
                 }
 
-                checkCollision(car);
+                checkFrameCollision(car);
+                checkWorkshopCollision(car);
 
                 car.move();
                 int x = (int) Math.round(car.getPosition().getX());
@@ -117,48 +130,53 @@ public class CarController {
         }
     }
 
-    private void checkCollision(Car car) {
+    private void checkFrameCollision(Car car) {
         Point position = car.getPosition();
         double direction = car.getDirection();
         double speed = car.getCurrentSpeed();
 
+        // Check the new potential position after movement
         double radians = Math.toRadians(direction);
         int newX = (int) (position.x + Math.cos(radians) * speed);
         int newY = (int) (position.y + Math.sin(radians) * speed);
 
-        // Check if the car is going outside the boundaries
+        // Check if the new position would go outside the frame boundaries
+        // 100x60 is the size of the "car"
         if (newX < 0 || newX + 100 > windowWidth || newY < 0 || newY + 60 > windowHeight) {
-            car.stopEngine();
-            car.setDirection(car.getDirection() + 180);
-            car.startEngine();
+            car.stopEngine();  // Stop the car
+            car.setDirection(car.getDirection() + 180);  // Reverse direction
+            car.startEngine();  // Start the car
         }
+    }
 
-        // Check if the car is a Volvo and near the workshop
-        if (car instanceof Volvo240) {
-            Point volvoWorkshopPoint = frame.drawPanel.getVolvoWorkshopPoint();
-            Workshop<Volvo240> volvoWorkshop = frame.drawPanel.getVolvoWorkshop();
+    private void checkWorkshopCollision(Car car) {
+        Point carPos = car.getPosition();
 
-            // Ensure only this car's position is checked
-            if (Math.abs(newX - volvoWorkshopPoint.x) < 50 && Math.abs(newY - volvoWorkshopPoint.y) < 50) {
-                // Check if this car is already in the workshop
-                boolean isAlreadyStored = false;
-                for (int i = 0; i < volvoWorkshop.getSize(); i++) {
-                    if (volvoWorkshop.getCar(i) == car) {  // Compare object references
-                        isAlreadyStored = true;
-                        break;
-                    }
-                }
+        double direction = car.getDirection();
+        double speed = car.getCurrentSpeed();
 
-                if (!isAlreadyStored) {
-                    try {
-                        volvoWorkshop.addCar((Volvo240) car);
-                        System.out.println("Volvo added to workshop: " + car);
-                    } catch (IllegalStateException e) {
-                        System.out.println("Workshop is full!");
-                    }
+        // Check the new potential position after movement
+        double radians = Math.toRadians(direction);
+        int newX = (int) (carPos.x + Math.cos(radians) * speed);
+        int newY = (int) (carPos.y + Math.sin(radians) * speed);
+
+        for (var ws : workshops.keySet()) {
+            Point wsPos = workshops.get(ws);
+
+            Point workshopCollisionOffset = new Point(50, 50);
+            Point workshopMax = new Point(wsPos.x + workshopCollisionOffset.x,
+                    wsPos.y + workshopCollisionOffset.y);
+            Point workshopMin = new Point(wsPos.x - workshopCollisionOffset.x,
+                    wsPos.y - workshopCollisionOffset.y);
+            if (carPos.x > workshopMin.x && carPos.x < workshopMax.x && carPos.y > workshopMin.y && carPos.y < workshopMax.y) {
+                if (car.getClass() == Volvo240.class) {
+                    frame.drawPanel.hideit(car);
                 }
             }
         }
+
+
+
     }
 
     void setTurboOn() {

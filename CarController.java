@@ -1,7 +1,4 @@
-import org.w3c.dom.ranges.Range;
-
 import javax.swing.*;
-import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,13 +23,13 @@ public class CarController {
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
+    ArrayList<CarDriver> cars = new ArrayList<>();
 
     HashMap<Workshop<? extends Car>, Point> workshops = new HashMap<>();
 
     // Window dimensions (from CarView)
-    private int windowWidth;
-    private int windowHeight;
+    public int windowWidth;
+    public int windowHeight;
     public CarController() {}
 
     //methods:
@@ -54,10 +51,10 @@ public class CarController {
         brokenVolvo.setPosition(new Point(0, 300));
 
         // Add the cars to the list
-        cc.cars.add(volvo);
-        cc.cars.add(saab);
-        cc.cars.add(scania);
-        cc.cars.add(brokenVolvo);
+        cc.cars.add(new CarDriver(volvo));
+        cc.cars.add(new CarDriver(saab));
+        cc.cars.add(new CarDriver(scania));
+        cc.cars.add(new CarDriver(brokenVolvo));
 
 
         // Start a new view and send a reference of self
@@ -81,19 +78,19 @@ public class CarController {
     * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (Car car : cars) {
-                if (car instanceof Scania && !((Scania) car).canDrive()) {
+            for (CarDriver carDriver : cars) {
+                if (carDriver.car instanceof Scania && !((Scania) carDriver.car).canDrive()) {
                     continue; // Skip moving this car
                 }
 
-                checkFrameCollision(car);
-                checkWorkshopCollision(car);
+                checkFrameCollision(carDriver.car);
+                checkWorkshopCollision(carDriver.car);
 
-                car.move();
-                int x = (int) Math.round(car.getPosition().getX());
-                int y = (int) Math.round(car.getPosition().getY());
+                carDriver.car.move();
+                int x = (int) Math.round(carDriver.car.getPosition().getX());
+                int y = (int) Math.round(carDriver.car.getPosition().getY());
 
-                frame.drawPanel.moveit(car, x, y);
+                frame.drawPanel.moveit(carDriver.car, x, y);
                 // repaint() calls the paintComponent method of the panel
                 frame.drawPanel.repaint();
             }
@@ -102,35 +99,31 @@ public class CarController {
 
     // Calls the gas method for each car once
     void gas(int amount) {
-        double gas = ((double) amount) / 100;
-        for (Car car : cars
-                ) {
-            car.gas(gas);
+        for (CarDriver car : cars) {
+            car.gas(amount);
         }
     }
 
     // Calls the break method for each car once
     void brake(int amount) {
-        double brake = ((double) amount) / 100;
-        for (Car car : cars
-        ) {
-            car.brake(brake);
+        for (CarDriver car : cars) {
+            car.brake(amount);
         }
     }
 
     public void startAllCars() {
-        for (Car car : cars) {
-            car.startEngine();
+        for (CarDriver car : cars) {
+            car.startCar();
         }
     }
 
     public void stopAllCars() {
-        for (Car car : cars) {
-            car.stopEngine();
+        for (CarDriver car : cars) {
+            car.stopCar();
         }
     }
 
-    private void checkFrameCollision(Car car) {
+    public void checkFrameCollision(Car car) {
         Point position = car.getPosition();
         double direction = car.getDirection();
         double speed = car.getCurrentSpeed();
@@ -149,7 +142,7 @@ public class CarController {
         }
     }
 
-    private void checkWorkshopCollision(Car car) {
+    public void checkWorkshopCollision(Car car) {
         Point carPos = car.getPosition();
 
         double direction = car.getDirection();
@@ -180,39 +173,30 @@ public class CarController {
     }
 
     void setTurboOn() {
-        for (Car car : cars) {
-            if (car instanceof Saab95) {
-                ((Saab95) car).setTurboOn();
-            }
+        for (CarDriver car : cars) {
+            car.setTurboOn();
         }
     }
     void setTurboOff() {
-        for (Car car : cars) {
-            if (car instanceof Saab95) {
-                ((Saab95) car).setTurboOff();
-            }
+        for (CarDriver car : cars) {
+            car.setTurboOff();
         }
     }
     public Scania getScania() {
-        for (Car car : cars) {
-            if (car instanceof Scania) {
-                return (Scania) car;
-            }
+        for (CarDriver car : cars) {
+            return car.getScanias();
         }
         return null;
     }
+
     void raiseBed(int angle) {
-        for (Car car : cars) {
-            if (car instanceof Scania) {
-                ((Scania) car).raiseBed(angle);
-            }
+        for (CarDriver car : cars) {
+            car.raiseBed(angle);
         }
     }
     void lowerBed(int angle) {
-        for (Car car : cars) {
-            if (car instanceof Scania) {
-                ((Scania) car).lowerBed(angle);
-            }
+        for (CarDriver car : cars) {
+            car.lowerBed(angle);
         }
     }
 }

@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Simulation {
+public class Application {
 
     private CarController cc;
 
@@ -11,14 +11,14 @@ public class Simulation {
     private final int delay = 50;
     // The timer is started with a listener (see below) that executes the statements
     // each step between delays.
-    private javax.swing.Timer timer = new Timer(delay, new Simulation.TimerListener());
+    private javax.swing.Timer timer = new Timer(delay, new Application.TimerListener());
 
     /* Each step the TimerListener moves all the cars in the list and tells the
      * view to update its images. Change this method to your needs.
      * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (CarDriver carDriver : cc.cars) {
+            for (CarManager carDriver : cc.cars) {
                 if (carDriver.car instanceof Scania && !((Scania) carDriver.car).canDrive()) {
                     continue; // Skip moving this car
                 }
@@ -39,7 +39,9 @@ public class Simulation {
 
     public static void main(String[] args) {
         // Instance of this class
-        Simulation sim = new Simulation();
+        Application sim = new Application();
+
+        sim.cc = new CarController();
 
         // Create the cars
         Volvo240 volvo = new Volvo240();
@@ -54,10 +56,10 @@ public class Simulation {
         brokenVolvo.setPosition(new Point(0, 300));
 
         // Add the cars to the list
-        sim.cc.cars.add(new CarDriver(volvo));
-        sim.cc.cars.add(new CarDriver(saab));
-        sim.cc.cars.add(new CarDriver(scania));
-        sim.cc.cars.add(new CarDriver(brokenVolvo));
+        sim.cc.cars.add(new CarManager(volvo));
+        sim.cc.cars.add(new CarManager(saab));
+        sim.cc.cars.add(new CarManager(scania));
+        sim.cc.cars.add(new CarManager(brokenVolvo));
 
 
         // Start a new view and send a reference of self

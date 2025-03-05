@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,14 +21,14 @@ public class CarTransportTest {
     void testCannotMoveOrAccelerateWhenRampIsDown() {
         transport.stopEngine();
         transport.lowerBed();
-        assertThrows(IllegalStateException.class, () -> transport.move());
+        Assertions.assertThrows(IllegalStateException.class, () -> transport.move());
     }
 
     @Test
     void testLoadCarWhenRampIsUp() {
         transport.stopEngine();
         transport.raiseBed();
-        assertThrows(IllegalStateException.class, () -> transport.loadCar(volvo));
+        Assertions.assertThrows(IllegalStateException.class, () -> transport.loadCar(volvo));
     }
 
     @Test
@@ -36,7 +37,7 @@ public class CarTransportTest {
         transport.lowerBed();
         transport.loadCar(volvo);
         Car unloaded = transport.unloadCar();
-        assertEquals(transport.getPosition().x - 1, unloaded.getPosition().x);
+        Assertions.assertEquals(transport.getPosition().x - 1, unloaded.getPosition().x);
     }
 
     @Test
@@ -44,7 +45,7 @@ public class CarTransportTest {
         transport.stopEngine();
         transport.lowerBed();
         volvo.setPosition(new Point(9999, 9999));
-        assertThrows(IllegalStateException.class, () -> transport.loadCar(volvo));
+        Assertions.assertThrows(IllegalStateException.class, () -> transport.loadCar(volvo));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class CarTransportTest {
         transport.lowerBed();
         transport.loadCar(volvo);
         transport.raiseBed();
-        assertThrows(IllegalStateException.class, () -> transport.unloadCar());
+        Assertions.assertThrows(IllegalStateException.class, () -> transport.unloadCar());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class CarTransportTest {
         Car scaniaTruck = new Scania();
         transport.stopEngine();
         transport.lowerBed();
-        assertThrows(IllegalStateException.class, () -> transport.loadCar(scaniaTruck));
+        Assertions.assertThrows(IllegalStateException.class, () -> transport.loadCar(scaniaTruck));
     }
 
     @Test
@@ -70,6 +71,6 @@ public class CarTransportTest {
         transport.loadCar(volvo);
         transport.raiseBed();
         transport.move();
-        assertEquals(transport.getPosition(),volvo.getPosition());
+        Assertions.assertEquals(transport.getPosition(),volvo.getPosition());
     }
 }

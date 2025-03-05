@@ -23,7 +23,7 @@ public class CarController {
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    ArrayList<CarDriver> cars = new ArrayList<>();
+    ArrayList<CarManager> cars = new ArrayList<>();
 
     HashMap<Workshop<? extends Car>, Point> workshops = new HashMap<>();
 
@@ -51,10 +51,10 @@ public class CarController {
         brokenVolvo.setPosition(new Point(0, 300));
 
         // Add the cars to the list
-        cc.cars.add(new CarDriver(volvo));
-        cc.cars.add(new CarDriver(saab));
-        cc.cars.add(new CarDriver(scania));
-        cc.cars.add(new CarDriver(brokenVolvo));
+        cc.cars.add(new CarManager(volvo));
+        cc.cars.add(new CarManager(saab));
+        cc.cars.add(new CarManager(scania));
+        cc.cars.add(new CarManager(brokenVolvo));
 
 
         // Start a new view and send a reference of self
@@ -78,7 +78,7 @@ public class CarController {
     * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (CarDriver carDriver : cars) {
+            for (CarManager carDriver : cars) {
                 if (carDriver.car instanceof Scania && !((Scania) carDriver.car).canDrive()) {
                     continue; // Skip moving this car
                 }
@@ -99,26 +99,26 @@ public class CarController {
 
     // Calls the gas method for each car once
     void gas(int amount) {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.gas(amount);
         }
     }
 
     // Calls the break method for each car once
     void brake(int amount) {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.brake(amount);
         }
     }
 
     public void startAllCars() {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.startCar();
         }
     }
 
     public void stopAllCars() {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.stopCar();
         }
     }
@@ -173,29 +173,29 @@ public class CarController {
     }
 
     void setTurboOn() {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.setTurboOn();
         }
     }
     void setTurboOff() {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.setTurboOff();
         }
     }
     public Scania getScania() {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             return car.getScanias();
         }
         return null;
     }
 
     void raiseBed(int angle) {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.raiseBed(angle);
         }
     }
     void lowerBed(int angle) {
-        for (CarDriver car : cars) {
+        for (CarManager car : cars) {
             car.lowerBed(angle);
         }
     }

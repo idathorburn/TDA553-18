@@ -1,9 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +10,6 @@ import javax.swing.*;
 public class DrawPanel extends JPanel{
 
     // To keep track of all cars
-    private HashMap<String, BufferedImage> carImages = new HashMap<>();
     private HashMap<Car, Point> carPositions = new HashMap<>();
 
     private HashMap<String, BufferedImage> workshopImages = new HashMap<>();
@@ -40,18 +36,6 @@ public class DrawPanel extends JPanel{
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.green);
-        // Print an error message in case file is not found with a try/catch block
-        try {
-            carImages.put("Volvo240", ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg")));
-            carImages.put("Saab95", ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg")));
-            carImages.put("Scania", ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg")));
-
-            workshopImages.put("Workshop<Volvo240>" ,ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg")));
-            workshopImages.put("Workshop" ,ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg")));
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     // This method is called each time the panel updates/refreshes/repaints itself

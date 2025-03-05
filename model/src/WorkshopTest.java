@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,14 +18,14 @@ public class WorkshopTest {
     @Test
     void testAddCar() {
         workshop.addCar(volvo);
-        assertEquals(1, workshop.getSize());
+        Assertions.assertEquals(1, workshop.getSize());
     }
 
     @Test
     void testAddCarWhenFull() {
         workshop.addCar(volvo);
         workshop.addCar(new Volvo240());
-        assertThrows(IllegalStateException.class, () -> workshop.addCar(new Volvo240()));
+        Assertions.assertThrows(IllegalStateException.class, () -> workshop.addCar(new Volvo240()));
     }
 
 //    Testing workshop does not work with wrong car type
@@ -38,6 +39,6 @@ public class WorkshopTest {
     @Test
     void testRemoveCar() {
         workshop.addCar(volvo);
-        assertTrue(workshop.removeCar(volvo));
+        Assertions.assertTrue(workshop.removeCar(volvo));
     }
 }

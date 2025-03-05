@@ -11,11 +11,16 @@ public class Workshop<T extends Car> {
         this.storedCars = new ArrayList<>();
     }
 
-    public void addCar(T car) {
+    public void addCar(Car car) {
         if (storedCars.size() >= capacity) {
             throw new IllegalStateException("Workshop is full!");
         }
-        storedCars.add(car);
+        try {
+            storedCars.add(car);
+        }
+        catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean removeCar(T car) {

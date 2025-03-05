@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,64 +19,64 @@ public class CarTest {
 
     @Test
     public void testVolvo240Constructor() {
-        assertEquals(4, volvo.getNrDoors());
-        assertEquals(4.8, volvo.getLength());
-        assertEquals(100, volvo.getEnginePower());
-        assertEquals(Color.black, volvo.getColor());
-        assertEquals(0, volvo.getCurrentSpeed());
+        Assertions.assertEquals(4, volvo.getNrDoors());
+        Assertions.assertEquals(4.8, volvo.getLength());
+        Assertions.assertEquals(100, volvo.getEnginePower());
+        Assertions.assertEquals(Color.black, volvo.getColor());
+        Assertions.assertEquals(0, volvo.getCurrentSpeed());
     }
 
     @Test
     public void testSaab95Constructor() {
-        assertEquals(2, saab.getNrDoors());
-        assertEquals(5, saab.getLength());
-        assertEquals(125, saab.getEnginePower());
-        assertEquals(Color.red, saab.getColor());
-        assertEquals(0, saab.getCurrentSpeed());
+        Assertions.assertEquals(2, saab.getNrDoors());
+        Assertions.assertEquals(5, saab.getLength());
+        Assertions.assertEquals(125, saab.getEnginePower());
+        Assertions.assertEquals(Color.red, saab.getColor());
+        Assertions.assertEquals(0, saab.getCurrentSpeed());
     }
 
     @Test
     public void testStartEngine() {
         volvo.startEngine();
-        assertEquals(0.1, volvo.getCurrentSpeed());
+        Assertions.assertEquals(0.1, volvo.getCurrentSpeed());
     }
 
     @Test
     public void testStopEngine() {
         volvo.startEngine();
         volvo.stopEngine();
-        assertEquals(0, volvo.getCurrentSpeed());
+        Assertions.assertEquals(0, volvo.getCurrentSpeed());
     }
 
     @Test
     public void testVolvo240SpeedFactor() {
-        assertEquals(1.25, volvo.speedFactor(), 0.01);
+        Assertions.assertEquals(1.25, volvo.speedFactor(), 0.01);
     }
 
     @Test
     public void testSaab95SpeedFactorWithTurboOff() {
         saab.setTurboOff();
-        assertEquals(1.25, saab.speedFactor(), 0.01);
+        Assertions.assertEquals(1.25, saab.speedFactor(), 0.01);
     }
 
     @Test
     public void testSaab95SpeedFactorWithTurboOn() {
         saab.setTurboOn();
-        assertEquals(1.625, saab.speedFactor(), 0.01);
+        Assertions.assertEquals(1.625, saab.speedFactor(), 0.01);
     }
 
     @Test
     public void testGasValidAmount() {
         volvo.startEngine();
         volvo.gas(0.5);
-        assertTrue(volvo.getCurrentSpeed() > 0.1);
+        Assertions.assertTrue(volvo.getCurrentSpeed() > 0.1);
     }
 
     @Test
     public void testGasInvalidAmountThrowsException() {
         volvo.startEngine();
-        assertThrows(IllegalArgumentException.class, () -> volvo.gas(-0.5));
-        assertThrows(IllegalArgumentException.class, () -> volvo.gas(1.5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> volvo.gas(-0.5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> volvo.gas(1.5));
     }
 
     @Test
@@ -84,14 +85,14 @@ public class CarTest {
         volvo.gas(0.5);
         double speedBeforeBrake = volvo.getCurrentSpeed();
         volvo.brake(0.3);
-        assertTrue(volvo.getCurrentSpeed() < speedBeforeBrake);
+        Assertions.assertTrue(volvo.getCurrentSpeed() < speedBeforeBrake);
     }
 
     @Test
     public void testBrakeInvalidAmountThrowsException() {
         volvo.startEngine();
-        assertThrows(IllegalArgumentException.class, () -> volvo.brake(-0.5));
-        assertThrows(IllegalArgumentException.class, () -> volvo.brake(1.5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> volvo.brake(-0.5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> volvo.brake(1.5));
     }
 
     @Test
@@ -99,8 +100,8 @@ public class CarTest {
         volvo.startEngine();
         volvo.gas(1);
         volvo.move();
-        assertNotEquals(0, volvo.getPosition().x);
-        assertEquals(0, volvo.getPosition().y);
+        Assertions.assertNotEquals(0, volvo.getPosition().x);
+        Assertions.assertEquals(0, volvo.getPosition().y);
     }
 
     @Test
@@ -109,28 +110,28 @@ public class CarTest {
         volvo.gas(1);
         volvo.turnLeft();
         volvo.move();
-        assertNotEquals(0, volvo.getPosition().y);
-        assertEquals(0, volvo.getPosition().x, epsilon);
+        Assertions.assertNotEquals(0, volvo.getPosition().y);
+        Assertions.assertEquals(0, volvo.getPosition().x, epsilon);
     }
 
     @Test
     public void testTurnLeft() {
         double initialDirection = volvo.getDirection();
         volvo.turnLeft();  // Turn left, so direction should decrease by 90 degrees
-        assertEquals((initialDirection - 90 + 360) % 360, volvo.getDirection());
+        Assertions.assertEquals((initialDirection - 90 + 360) % 360, volvo.getDirection());
     }
 
     @Test
     public void testTurnRight() {
         double initialDirection = volvo.getDirection();
         volvo.turnRight();  // Turn right, so direction should increase by 90 degrees
-        assertEquals((initialDirection + 90) % 360, volvo.getDirection());
+        Assertions.assertEquals((initialDirection + 90) % 360, volvo.getDirection());
     }
 
     @Test
     public void testSetColor() {
         volvo.setColor(Color.blue);
-        assertEquals(Color.blue, volvo.getColor());
+        Assertions.assertEquals(Color.blue, volvo.getColor());
     }
 
     @Test
@@ -139,7 +140,7 @@ public class CarTest {
         for (int i = 0; i < 100; i++) {
             volvo.gas(1.0);
         }
-        assertTrue(volvo.getCurrentSpeed() <= volvo.getEnginePower());
+        Assertions.assertTrue(volvo.getCurrentSpeed() <= volvo.getEnginePower());
     }
 
     @Test
@@ -147,7 +148,7 @@ public class CarTest {
         volvo.startEngine();
         volvo.brake(1.0);
         volvo.brake(1.0);
-        assertEquals(0, volvo.getCurrentSpeed());
+        Assertions.assertEquals(0, volvo.getCurrentSpeed());
     }
 
     @Test
@@ -156,7 +157,7 @@ public class CarTest {
         double initialX = volvo.getPosition().x;
         double initialY = volvo.getPosition().y;
         volvo.move();
-        assertEquals(initialX, volvo.getPosition().x);
-        assertEquals(initialY, volvo.getPosition().y);
+        Assertions.assertEquals(initialX, volvo.getPosition().x);
+        Assertions.assertEquals(initialY, volvo.getPosition().y);
     }
 }

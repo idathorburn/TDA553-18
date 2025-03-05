@@ -113,4 +113,16 @@ public abstract class Car implements Moveable{
     public void turnRight() {
         setDirection(getDirection() + 90);
     }
+
+    public Point nextPosition() {
+        Point position = getPosition();
+        double direction = getDirection();
+        double speed = getCurrentSpeed();
+
+        // Calc the new potential position after movement
+        double radians = Math.toRadians(direction);
+        int newX = (int) (position.x + Math.cos(radians) * speed);
+        int newY = (int) (position.y + Math.sin(radians) * speed);
+        return new Point(newX, newY);
+    }
 }

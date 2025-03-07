@@ -5,7 +5,7 @@ import java.util.Deque;
 public class CarTransport extends Truck {
     private final int maxCapacity;
     private final double maxCarLength;
-    private Deque<Car> loadedCars;
+    private final Deque<Car> loadedCars;
     private final int maxLoadDistance;
 
     private boolean rampDown;

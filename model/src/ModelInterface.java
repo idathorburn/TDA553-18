@@ -1,17 +1,18 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface ModelInterface {
-    public HashMap<Car, Point> cars;
-    public SimulationManager simulationManager;
-    public EnvironmentManager environmentManager;
-    public List<ModelObserver> observers;
-    public ImageManager imageManager;
+    public HashMap<Car, Point> cars = new HashMap<>();
+    public SimulationManager simulationManager = null;
+    public EnvironmentManager environmentManager = null;
+    public ArrayList<ModelObserver> observers = new ArrayList<>();
+    public ImageManager imageManager = null;
 
     void addObserver(ModelObserver modelObserver);
 
-    void createCars(int numberOfCars, Point position);
-    void checkCollision(T car);
+    void createCar(Class<? extends Car> carClass, Point position);
+    void checkCollision(Car car);
 
     void gas(int amount);
     void brake(int amount);
@@ -19,7 +20,7 @@ public interface ModelInterface {
     void stopCars();
     void setTurboOn();
     void setTurboOff();
-    void getScanias();
-    void raiseBed();
-    void lowerBed();
+    void raiseBed(int angle);
+    void lowerBed(int angle);
+    Scania getScanias();
 }

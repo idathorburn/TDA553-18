@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class CarManager implements ModelInterface {
 
@@ -10,6 +9,12 @@ public class CarManager implements ModelInterface {
     public EnvironmentManager environmentManager;
     public ArrayList<ModelObserver> observers;
     public ImageManager imageManager;
+
+    public CarManager(SimulationManager sim, EnvironmentManager env, ImageManager img){
+        simulationManager = sim;
+        environmentManager = env;
+        imageManager = img;
+    }
 
     public void addObserver(ModelObserver modelObserver){
         observers.add(modelObserver);
@@ -42,55 +47,71 @@ public class CarManager implements ModelInterface {
     }
 
 
-    public Car car;
-
-    public CarManager(Car c){
-        car = c;
-    }
-
-    void gas(int amount) {
+    public void gas(int amount) {
         double gas = ((double) amount) / 100;
-        car.gas(gas);
+        for (Car car : cars.keySet()) {
+            car.gas(gas);
+        }
     }
 
     // Calls the break method for each car once
-    void brake(int amount) {
+    public void brake(int amount) {
         double brake = ((double) amount) / 100;
-        car.brake(brake);
-    }
-
-    public void startCar() {
-        car.startEngine();
-    }
-
-    public void stopCar() {
-        car.stopEngine();
-    }
-
-    void setTurboOn() {
-        if (car instanceof Saab95) {
-            ((Saab95) car).setTurboOn();
+        for (Car car : cars.keySet()) {
+            car.brake(brake);
         }
     }
-    void setTurboOff() {
-        if (car instanceof Saab95) {
-            ((Saab95) car).setTurboOff();
+
+    public void startCars() {
+        for (Car car : cars.keySet()) {
+            car.startEngine();
         }
     }
+
+    public void stopCars() {
+        for (Car car : cars.keySet()) {
+            car.stopEngine();
+        }
+    }
+
+    public void setTurboOn() {
+        for (Car car : cars.keySet()) {
+            if (car instanceof Saab95) {
+                ((Saab95) car).setTurboOn();
+            }
+        }
+    }
+
+    public void setTurboOff() {
+        for (Car car : cars.keySet()) {
+            if (car instanceof Saab95) {
+                ((Saab95) car).setTurboOff();
+            }
+        }
+    }
+
+    public void raiseBed(int angle) {
+        for (Car car : cars.keySet()) {
+            if (car instanceof Scania) {
+                ((Scania) car).raiseBed(angle);
+            }
+        }
+    }
+
+    public void lowerBed(int angle) {
+        for (Car car : cars.keySet()) {
+            if (car instanceof Scania) {
+                ((Scania) car).lowerBed(angle);
+            }
+        }
+    }
+
     public Scania getScanias() {
-        if (car instanceof Scania) {
-            return (Scania) car;
+        for (Car car : cars.keySet()) {
+            if (car instanceof Scania) {
+                return (Scania) car;
+            }
         }
         return null;
-    }
-    void raiseBed(int angle) {
-        if (car instanceof Scania) {
-            ((Scania) car).raiseBed(angle);
-        }
-    }
-    void lowerBed(int angle) {
-        if (car instanceof Scania) {
-            ((Scania) car).lowerBed(angle);
-        }
     }
 }

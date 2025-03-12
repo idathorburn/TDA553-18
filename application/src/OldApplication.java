@@ -1,3 +1,4 @@
+/*
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,9 +14,11 @@ public class OldApplication {
     // each step between delays.
     private javax.swing.Timer timer = new Timer(delay, new OldApplication.TimerListener());
 
-    /* Each step the TimerListener moves all the cars in the list and tells the
+    */
+/* Each step the TimerListener moves all the cars in the list and tells the
      * view to update its images. Change this method to your needs.
-     * */
+     * *//*
+
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             for (CarManager carDriver : cc.cars) {
@@ -79,3 +82,4 @@ public class OldApplication {
     }
 
 }
+*/

@@ -7,8 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="controller" />
-    <orderEntry type="module" module-name="model" />
-    <orderEntry type="module" module-name="view" />
+    <orderEntry type="module" module-name="controller" exported="" />
+    <orderEntry type="module" module-name="model" exported="" />
+    <orderEntry type="module" module-name="view" exported="" />
+    <orderEntry type="module" module-name="TDA55-lab3" />
   </component>
 </module>

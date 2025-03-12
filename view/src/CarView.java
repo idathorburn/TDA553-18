@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * This class represents the full view of the MVC pattern of your car simulator.
@@ -13,9 +15,6 @@ import java.util.HashMap;
 public class CarView extends JFrame implements ModelObserver{
     private static final int X = 800;
     private static final int Y = 800;
-
-    // The controller member
-    OldCarController carC;
 
     DrawPanel drawPanel = new DrawPanel(X, Y-240);
     JPanel controlPanel = new JPanel();
@@ -38,6 +37,9 @@ public class CarView extends JFrame implements ModelObserver{
     JButton liftBedButton = new JButton("Scania Lift Bed");
     JButton lowerBedButton = new JButton("Lower Lift Bed");
 
+    JButton addCarButton = new JButton("Add Car");
+    JButton removeCarButton = new JButton("Remove Car");
+
     JButton startButton = new JButton("Start all cars");
     JButton stopButton = new JButton("Stop all cars");
 
@@ -46,23 +48,35 @@ public class CarView extends JFrame implements ModelObserver{
     }
 
     @Override
-    public void actOnCarsUpdate(HashMap<Car, Point> cars) {
+    public void actOnCarsUpdate(ArrayList<Car> cars) {
+        drawPanel.EmptyCarPositions();
+        for (var car : cars) {
+            var p = car.getPosition();
+            drawPanel.moveit(car, p.x, p.y);
+        }
+    }
 
+    @Override
+    public void actOnScaniaBedUpdate(double angle) {
+        updateBedAngleDisplay(angle);
     }
 
     @Override
     public void actOnSimulationUpdate() {
-
+        this.repaint();
     }
 
     @Override
     public void actOnEnivonmentUpdate(EnvironmentManager environmentManager) {
-
+        for (var ws : environmentManager.workshops.keySet()) {
+            var p = environmentManager.workshops.get(ws);
+            drawPanel.moveit(ws, p.x, p.y);
+        }
     }
 
     @Override
-    public void actOnlmagesUpdate(ImageManager imageManager) {
-
+    public void actOnImagesUpdate(ImageManager imageManager) {
+        drawPanel.putImages(imageManager.getImages());
     }
 
     // Sets everything in place and fits everything
@@ -109,6 +123,8 @@ public class CarView extends JFrame implements ModelObserver{
         controlPanel.add(brakeButton);
         controlPanel.add(turboOffButton);
         controlPanel.add(lowerBedButton);
+        controlPanel.add(addCarButton);
+        controlPanel.add(removeCarButton);
         controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
         this.add(controlPanel);
         controlPanel.setBackground(Color.CYAN);
@@ -123,22 +139,6 @@ public class CarView extends JFrame implements ModelObserver{
         stopButton.setPreferredSize(new Dimension(X/5-15,200));
         this.add(stopButton);
 
-        // ------- Action Listeners -------
-        gasButton.addActionListener(e -> carC.gas(gasAmount));
-        brakeButton.addActionListener(e -> carC.brake(gasAmount));
-        liftBedButton.addActionListener(e -> {
-            carC.raiseBed(bedAngleAmount);
-            updateBedAngleDisplay();
-        });
-        lowerBedButton.addActionListener(e -> {
-            carC.lowerBed(bedAngleAmount);
-            updateBedAngleDisplay();
-        });
-        startButton.addActionListener(e -> carC.startAllCars());
-        stopButton.addActionListener(e -> carC.stopAllCars());
-        turboOnButton.addActionListener(e -> carC.setTurboOn());
-        turboOffButton.addActionListener(e -> carC.setTurboOff());
-
         // Make the frame pack all it's components by respecting the sizes if possible.
         this.pack();
 
@@ -151,6 +151,7 @@ public class CarView extends JFrame implements ModelObserver{
         // Make sure the frame exits when "x" is pressed
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
     public int getWindowWidth() {
         return X;
     }
@@ -159,10 +160,7 @@ public class CarView extends JFrame implements ModelObserver{
         return Y;
     }
 
-    public void updateBedAngleDisplay() {
-        if (carC.getScania() != null) {
-            double currentAngle = carC.getScania().getBedAngle();
-            currentBedAngleLabel.setText("Current: " + currentAngle);
-        }
+    public void updateBedAngleDisplay(double currentAngle) {
+        currentBedAngleLabel.setText("Current: " + currentAngle);
     }
 }

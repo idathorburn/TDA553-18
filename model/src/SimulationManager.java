@@ -8,11 +8,17 @@ public class SimulationManager {
     private final int delay = 50;
     // The timer is started with a listener (see below) that executes the statements
     // each step between delays.
-    private Timer timer = new Timer(delay, new TimerListener());
+    private Timer timer = null;
 
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+    public SimulationManager() {
+        timer = new Timer(delay, null);
+    }
 
-        }
+    public void addListener(CarManager manager) {
+        timer.addActionListener(manager);
+    }
+
+    public void startSimulation() {
+        timer.start();
     }
 }

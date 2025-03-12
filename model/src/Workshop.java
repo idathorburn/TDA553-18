@@ -16,7 +16,7 @@ public class Workshop<T extends Car> {
             throw new IllegalStateException("Workshop is full!");
         }
         try {
-            storedCars.add(car);
+            storedCars.add((T) car);
         }
         catch (ClassCastException e) {
             e.printStackTrace();
@@ -37,5 +37,9 @@ public class Workshop<T extends Car> {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public boolean hasPlaceLeft(){
+        return getSize() < getCapacity();
     }
 }

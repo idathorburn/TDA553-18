@@ -31,4 +31,8 @@ public class ImageManager {
         return images.get(imageClass.getSimpleName());
     }
 
+    public HashMap<String, BufferedImage> getImages() {
+        return images;
+    }
+
 }

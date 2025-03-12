@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public interface ModelObserver {
-    public void actOnCarsUpdate(HashMap<Car, Point> cars);
+    public void actOnCarsUpdate(ArrayList<Car> cars);
+    public void actOnScaniaBedUpdate(double angle);
     public void actOnSimulationUpdate();
     public void actOnEnivonmentUpdate(EnvironmentManager environmentManager);
-    public void actOnlmagesUpdate(ImageManager imageManager);
+    public void actOnImagesUpdate(ImageManager imageManager);
 }

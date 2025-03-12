@@ -12,7 +12,7 @@ public interface ModelInterface {
     void addObserver(ModelObserver modelObserver);
 
     void createCar(Class<? extends Car> carClass, Point position);
-    void checkCollision(Car car);
+    //void checkCollision(Car car);
 
     void gas(int amount);
     void brake(int amount);
